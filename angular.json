@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/minibus-web",
+            "outputPath": "dist/minibus-web/browser",
             "index": "src/public/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -91,6 +91,59 @@
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/minibus-web/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "minibus-web:build:development",
+              "serverTarget": "minibus-web:server:development"
+            },
+            "production": {
+              "browserTarget": "minibus-web:build:production",
+              "serverTarget": "minibus-web:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "minibus-web:build:production",
+              "serverTarget": "minibus-web:server:production"
+            },
+            "development": {
+              "browserTarget": "minibus-web:build:development",
+              "serverTarget": "minibus-web:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
